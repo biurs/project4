@@ -4,6 +4,7 @@
     width: 80%;
     border-right: 2px solid #f8f9fa;
     border-left: 2px solid #f8f9fa;
+    background: #e5e4e0;
 }
 
 textarea {
@@ -17,4 +18,12 @@ textarea {
     border-bottom: 2px solid #f8f9fa;
     width: 100%;
     margin: auto;
+}
+
+.body {
+    background: #e5e4e0;
+}
+
+body {
+    background: #e5e4e0;
 }
