@@ -37,6 +37,19 @@ def new_post(request):
 def postbox(request, postbox):
     if postbox == 'all':
         posts = Post.objects.all()
+    else:
+        userid = postbox
+        posts = Post.objects.filter(
+            poster = userid
+        )
+
+    posts = posts.order_by('-timestamp').all()
+    return JsonResponse([post.serialize() for post in posts], safe=False)
+
+def profilebox(request, userid):
+    posts = Post.objects.filter(
+        poster = userid
+    )
 
     posts = posts.order_by('-timestamp').all()
     return JsonResponse([post.serialize() for post in posts], safe=False)
@@ -59,6 +72,9 @@ def login_view(request):
             })
     else:
         return render(request, "network/login.html")
+
+def load_profile(request, userid):
+    return render(request, "network/profile.html")
 
 
 def logout_view(request):

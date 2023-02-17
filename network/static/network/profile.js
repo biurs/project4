@@ -14,7 +14,7 @@ function make_post() {
 
     submit.onsubmit = function() {
         console.log('post request')
-        fetch('/post', {
+        fetch('/posts', {
             method: 'POST',
             body: JSON.stringify({
                 body: bodyform.value
@@ -40,8 +40,12 @@ function load_posts() {
     console.log('loadpost')
 
     document.querySelector('#post-box').innerHTML = '';
+ 
+    const url = new URL(window.location.href)
+    userid = url.pathname.slice(9)
 
-    fetch(`post/all`)
+    console.log(userid)
+    fetch(`posts/${userid}`)
     .then(response => response.json())
     .then(posts => {
         console.log(posts)
