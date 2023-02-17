@@ -1,0 +1,22 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div id="all-posts">
+    <h3>All Posts</h1>
+    <div id="login-view">
+        <form id="post-form">
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">New Post</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1"></textarea>
+              </div>
+            <button id="submit-post" type="submit" class="btn btn-primary">Post</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/network.js' %}"></script>
+{% endblock %}
