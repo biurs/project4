@@ -2,8 +2,8 @@
     margin: auto;
     padding: 10px;
     width: 80%;
-    border-right: 2px solid #f8f9fa;
-    border-left: 2px solid #f8f9fa;
+    border-right: 2px solid #c7c4bc;
+    border-left: 2px solid #c7c4bc;
     background: #e5e4e0;
 }
 
@@ -14,16 +14,29 @@ textarea {
 #login-view {
     padding-top: 10px;
     padding-bottom: 10px;
-    border-top: 2px solid #f8f9fa;
-    border-bottom: 2px solid #f8f9fa;
+    border-top: 2px solid #c7c4bc;
+    border-bottom: 2px solid #c7c4bc;
     width: 100%;
     margin: auto;
 }
 
 .body {
-    background: #e5e4e0;
+    background-color: #e5e4e0;
 }
 
 body {
-    background: #e5e4e0;
+    background-color: #e5e4e0;
+}
+
+.bg-light {
+    background-color: #c7c4bc !important;
+}
+
+.btn-primary {
+    background: #5d9e5d;
+    border-color: #5d9e5d;
+}
+.btn-primary:hover {
+    background: #3b653b;
+    border-color: #3b653b;
 }
