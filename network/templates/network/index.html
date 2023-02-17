@@ -8,12 +8,12 @@
         <form id="post-form">
             <div class="form-group">
                 <label for="exampleFormControlTextarea1">New Post</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1"></textarea>
-              </div>
-            <button id="submit-post" type="submit" class="btn btn-primary">Post</button>
+                <textarea class="form-control" id="body-form" maxlength="255" required></textarea>
             </div>
+            <button id="submit-post" type="submit" class="btn btn-primary">Post</button>
         </form>
     </div>
+    <div id="post-box"></div>
 </div>
 {% endblock %}
 
