@@ -1,31 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     console.log('loadpage')
-    const isuser = JSON.parse(document.getElementById('data-isuser').textContent);
-    
-    followbutton = document.querySelector('#follow')
-    //checks if the profile page is yours
-    //if true, allows you to make a post
-    //checks if you are following this profile and allow to follow/unfollow
-    if (isuser === true) {
-        make_post();
-    } else {
-        const isfollow = JSON.parse(document.getElementById('data-isfollow').textContent);
-        if (isfollow === true) {
-            followbutton.innerHTML = "Unfollow"
-            followbutton.onclick = function() {
-                follow(followbutton.innerHTML)
-            }
-        } else {
-            if (followbutton != null) {
-                followbutton.innerHTML = "Follow"
-                followbutton.onclick = function() {
-                    follow(followbutton.innerHTML)
-                }
-            }
-        }
-    }
+    //by default load all posts
 
+    //copies user.is_authenticated variable into script
+    const userauth = JSON.parse(document.getElementById('data-userauth').textContent);
+
+    if (userauth) {
+        make_post();
+    }
+    //by default load first page
     load_posts(1);
 
 
@@ -79,12 +63,8 @@ function load_posts(pagenum) {
     //handles the html buttons for the paginator
     changepage(pagenum)
 
-    const url = new URL(window.location.href)
-    userid = url.pathname.slice(9)
-
-    console.log(userid)
     //api path that returns all posts for this pagenum
-    fetch(`posts/${userid}/${pagenum}`)
+    fetch(`posts/following/${pagenum}`)
     .then(response => response.json())
     .then(posts => {
         //create a div for each post and format into html
@@ -231,47 +211,4 @@ function range(min, max) {
         arr[i] = min + i;
     }
     return arr;
-}
-
-function follow(state) {
-    //puts a json post with profile you are on's id, if state is follow then the follow value is true, else it is false
-    if (state === "Follow") {
-
-        //uses url of page to get userid
-        const url = new URL(window.location.href)
-        userid = url.pathname.slice(9)
-
-        fetch(`/follow`, {
-            method: 'POST',
-            body: JSON.stringify({
-                followed: userid,
-                follow: true
-            }) 
-        })
-        .then(response => response.json())
-        .then(result => {
-            console.log(result)
-        })
-        followbutton.innerHTML = "Unfollow"
-        return false;
-    } else {
-
-        console.log('unfollow')
-        const url = new URL(window.location.href)
-        userid = url.pathname.slice(9)
-
-        fetch(`/follow`, {
-            method: 'POST',
-            body: JSON.stringify({
-                followed: userid,
-                follow: false
-            }) 
-        })
-        .then(response => response.json())
-        .then(result => {
-            console.log(result)
-        })
-        followbutton.innerHTML = "Follow"
-        return false;
-    }
 }

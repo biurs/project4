@@ -46,3 +46,15 @@ body {
     padding: 10px;
     border: 2px solid #c7c4bc
 }
+
+#profile-title {
+    font-size: 16pt;
+    display: inline-block;
+}
+
+#follow {
+    margin-left: 20px;
+    margin-bottom: 8px;
+    margin-top: 1px;
+    width:90px;
+}

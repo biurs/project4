@@ -3,7 +3,7 @@
 
 {% block body %}
 <div id="all-posts">
-    <h3>All Posts</h1>
+    <h3>Following</h1>
     {% if user.is_authenticated %}
         <div id="login-view">
             <form id="post-form">
@@ -34,5 +34,5 @@
 
 {% block script %}
     {{ user.is_authenticated|json_script:"data-userauth" }}
-    <script src="{% static 'network/allpost.js' %}"></script>
+    <script src="{% static 'network/following.js' %}"></script>
 {% endblock %}

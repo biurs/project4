@@ -2,21 +2,49 @@
 {% load static %}
 
 {% block body %}
-<div id="all-posts">
-    <h3>All Posts</h1>
-    <div id="login-view">
-        <form id="post-form">
-            <div class="form-group">
-                <label for="exampleFormControlTextarea1">New Post</label>
-                <textarea class="form-control" id="body-form" maxlength="255" required></textarea>
-            </div>
-            <button id="submit-post" type="submit" class="btn btn-primary">Post</button>
-        </form>
+    <div id="all-posts">
+        {% if isuser %}
+            <div id="profile-title"><b>My Posts</b></div>
+        {% else %}
+            <div id="profile-title"><b>{{ username }}</b></div>
+
+            {% if user.is_authenticated %}
+            <button id="follow" class="btn btn-primary"></button>
+        
+            {% endif %}
+        {% endif %}
+
+        <div id="login-view">
+            {% if isuser %}
+            <form id="post-form">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">New Post</label>
+                    <textarea class="form-control" id="body-form" maxlength="255" required></textarea>
+                </div>
+                <button id="submit-post" type="submit" class="btn btn-primary">Post</button>
+            </form>
+            {% endif %}
+        </div>
+        <div id="post-box"></div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" id="page-prev">
+                    <a class="page-link" id="click-prev">Previous</a>
+                  </li>
+              {% for i in pagecount %}
+              <li class="page-item page-list" id="page-list-{{ i }}" value="{{ i }}"><a class="page-link page-num" id="page-link-{{ i }}">{{ i }}</a></li>
+              {% endfor %}
+              <li class="page-item" id="page-next">
+                <a class="page-link" id="click-next">Next</a>
+              </li>
+            </ul>
+          </nav>
     </div>
-    <div id="post-box"></div>
-</div>
 {% endblock %}
 
 {% block script %}
+
+    {{ isfollow|json_script:"data-isfollow" }}
+    {{ isuser|json_script:"data-isuser" }}
     <script src="{% static 'network/profile.js' %}"></script>
 {% endblock %}
