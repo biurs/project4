@@ -1,3 +1,6 @@
+const userid = JSON.parse(document.getElementById('data-userid').textContent);
+const userauth = JSON.parse(document.getElementById('data-userauth').textContent);
+
 document.addEventListener('DOMContentLoaded', function() {
 
     console.log('loadpage')
@@ -5,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //copies user.is_authenticated variable into script
     const userauth = JSON.parse(document.getElementById('data-userauth').textContent);
+    console.log(`userid: ${userid}`)
 
     if (userauth) {
         make_post();
@@ -47,11 +51,9 @@ function make_post() {
         })
 
         bodyform.value = '';
-        return false;
     }
 
-
-
+    return false;
 }
 
 function load_posts(pagenum) {
@@ -68,16 +70,125 @@ function load_posts(pagenum) {
     .then(response => response.json())
     .then(posts => {
         //create a div for each post and format into html
+        console.log(posts)
         posts.forEach(post => {
 
             const postbox = document.querySelector('#post-box');
+
             const postdiv = document.createElement('div');
             postdiv.className = 'post-div';
 
-            postdiv.innerHTML = `<a href="profile/${post.posterid}"><b>${post.poster}:</b></a>
-            ${post.body} <br> ${post.likes} likes, posted on: ${post.timestamp}`
+            const namediv = document.createElement('div');
+            namediv.className = 'name-div';
 
-            //add new div to end of postbox
+            const bodydiv = document.createElement('div');
+            bodydiv.className = 'body-div';
+
+            const infodiv = document.createElement('div');
+            infodiv.className = 'info-div';
+
+            namediv.innerHTML = `<a href="profile/${post.posterid}"><b>${post.poster}:</b></a>`
+            bodydiv.innerHTML = `${post.body}`
+            infodiv.innerHTML = `${post.likes} likes, posted on: ${post.timestamp}`
+
+            postdiv.append(namediv, bodydiv, infodiv)
+
+            //if post belongs to user allow them to edit it
+            if (userid == post.posterid) {
+                const editbutton = document.createElement('button');
+                editbutton.className = 'btn btn-primary'
+                editbutton.innerHTML = 'Edit'
+                postdiv.append(editbutton)
+                editbutton.onclick = function() {
+
+                    //on click of edit button: remove button, create a textarea with contents the post-body, and remove post-body
+                    postdiv.removeChild(editbutton)
+                    var editarea = document.createElement('textarea');
+                    editarea.className = 'edit-area';
+                    editarea.innerHTML = bodydiv.innerHTML
+                    postdiv.replaceChild(editarea, bodydiv)
+
+                    //create a save changes button
+                    const postedit = document.createElement('button');
+                    postedit.className = 'btn btn-primary'
+                    postedit.innerHTML = 'Save Changes'
+                    postdiv.append(postedit)
+                    postedit.onclick = function() {
+                        //submit json to edit body of post, checks that body is not blank
+                        fetch(`/posts`, {
+                            method: 'PUT',
+                            body: JSON.stringify({
+                                body: editarea.value,
+                                id: post.id
+                            })
+                          })
+                        //if textarea is blank treats 
+                        if (editarea.value != '') {
+                            bodydiv.innerHTML = editarea.value
+                        }
+                        postdiv.replaceChild(bodydiv, editarea)
+                        postdiv.replaceChild(editbutton, postedit)
+                        postdiv.removeChild(canceledit)
+
+                    }
+
+                    //create a cancel edit button
+                    const canceledit = document.createElement('button');
+                    canceledit.className = 'btn btn-primary'
+                    canceledit.innerHTML = 'Cancel'
+                    postdiv.append(canceledit)
+                    canceledit.onclick = function() {
+
+                        postdiv.replaceChild(bodydiv, editarea)
+                        postdiv.replaceChild(editbutton, postedit)
+                        postdiv.removeChild(canceledit)
+
+                    }
+                }
+            }
+            //is user is logged in, creates a like(or unlike) button
+            if (userauth === true) {
+                const likebutton = document.createElement('button');
+                likebutton.className = 'btn btn-primary'
+                if (post.liked === 'false') {
+                    var likestate = 'Like'
+                } else {
+                    var likestate = 'Unlike'
+                }
+                likebutton.innerHTML = likestate
+                postdiv.append(likebutton)
+                //onclick the button sends a json request which creates a new like object
+                likebutton.onclick = function() {
+
+                    fetch(`/like`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            likedpost: post.id,
+                            like: likestate
+                        }) 
+                    })
+                    .then(response => response.json())
+                    //after new like object is created, makes an api request for the updated total of likes on the post
+                    .then(result => {
+                        fetch(`/like/${post.id}`)
+                        .then(response => response.json())
+                        .then(result => {
+                            console.log(`likecount: ${result.likecount}`)
+                            infodiv.innerHTML = `${result.likecount} likes, posted on: ${post.timestamp}`
+                        })
+                    })
+
+                    //toggle like/unlike text when user likes or unlikes
+                    if (likestate === 'Like') {
+                        likestate = 'Unlike'
+                    } else {
+                        likestate = 'Like'
+                    }
+                    likebutton.innerHTML = likestate
+                }
+
+            }
+            //add all the posts to postbox
             postbox.append(postdiv)
         })
     })
@@ -111,6 +222,7 @@ function load_posts(pagenum) {
             return false
         }
     }
+    return false;
 }
 
 function changepage(pagenum) {

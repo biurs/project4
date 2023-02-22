@@ -35,6 +35,7 @@ body {
 .btn-primary {
     background: #5d9e5d;
     border-color: #5d9e5d;
+    margin-right: 6px;
 }
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
     background: #3b653b !important;
@@ -44,7 +45,8 @@ body {
 .post-div {
     margin-top: 10px;
     padding: 10px;
-    border: 2px solid #c7c4bc
+    border: 2px solid #c7c4bc;
+    overflow-wrap: break-word;
 }
 
 #profile-title {

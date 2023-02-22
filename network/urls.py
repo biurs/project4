@@ -15,7 +15,9 @@ urlpatterns = [
     path('posts', views.new_post, name='newpost'),
     path('posts/<str:postbox>/<int:pagenum>', views.postbox, name='postbox'),
     path('profile/posts/<int:userid>/<int:pagenum>', views.profilebox, name='userpost'),
-    path('follow', views.follow, name='follow')
+    path('follow', views.follow, name='follow'),
+    path('like', views.like, name='like'),
+    path('like/<str:postid>', views.like_count, name='likecount')
 
 ]
 

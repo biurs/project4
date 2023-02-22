@@ -4,6 +4,7 @@
 {% block body %}
 <div id="all-posts">
     <h3>All Posts</h1>
+
     {% if user.is_authenticated %}
         <div id="login-view">
             <form id="post-form">
@@ -15,15 +16,20 @@
             </form>
         </div>
     {% endif %}
+
     <div id="post-box"></div>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item" id="page-prev">
                 <a class="page-link" id="click-prev">Previous</a>
               </li>
-          {% for i in pagecount %}
-          <li class="page-item page-list" id="page-list-{{ i }}" value="{{ i }}"><a class="page-link page-num" id="page-link-{{ i }}">{{ i }}</a></li>
-          {% endfor %}
+
+            {% for i in pagecount %}
+            <li class="page-item page-list" id="page-list-{{ i }}" value="{{ i }}">
+                <a class="page-link page-num" id="page-link-{{ i }}">{{ i }}</a>
+            </li>
+            {% endfor %}
+
           <li class="page-item" id="page-next">
             <a class="page-link" id="click-next">Next</a>
           </li>
@@ -33,6 +39,8 @@
 {% endblock %}
 
 {% block script %}
+    {{ user.is_authenticated|json_script:"data-userauth" }}
+    {{ userid|json_script:"data-userid" }}
     {{ user.is_authenticated|json_script:"data-userauth" }}
     <script src="{% static 'network/allpost.js' %}"></script>
 {% endblock %}
